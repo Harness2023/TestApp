@@ -10,12 +10,5 @@ RUN set -Eeux \
     # smoke test to verify if maven is available
     && mvn --version
 RUN mvn package
-
-# Stage 2 (to create a downsized "container executable", ~180MB)
-FROM eclipse-temurin:17-jre-alpine
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /usr/src/myapp/target/app.jar .
-
 EXPOSE 8123
 ENTRYPOINT ["java", "-jar", "./app.jar"]
